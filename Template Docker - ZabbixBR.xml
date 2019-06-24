@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.2</version>
-    <date>2019-06-03T01:49:07Z</date>
+    <date>2019-06-24T03:00:51Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -42,11 +42,70 @@ Template App Docker - www.monitoringartist.com&#13;
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>docker.info[]</key>
+                    <key>docker.info[info]</key>
                     <delay>30s</delay>
                     <history>90d</history>
                     <trends>0</trends>
-                    <status>1</status>
+                    <status>0</status>
+                    <value_type>4</value_type>
+                    <allowed_hosts/>
+                    <units/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <description/>
+                    <inventory_link>0</inventory_link>
+                    <applications>
+                        <application>
+                            <name>Docker</name>
+                        </application>
+                    </applications>
+                    <valuemap/>
+                    <logtimefmt/>
+                    <preprocessing/>
+                    <jmx_endpoint/>
+                    <timeout>3s</timeout>
+                    <url/>
+                    <query_fields/>
+                    <posts/>
+                    <status_codes>200</status_codes>
+                    <follow_redirects>1</follow_redirects>
+                    <post_type>0</post_type>
+                    <http_proxy/>
+                    <headers/>
+                    <retrieve_mode>0</retrieve_mode>
+                    <request_method>0</request_method>
+                    <output_format>0</output_format>
+                    <allow_traps>0</allow_traps>
+                    <ssl_cert_file/>
+                    <ssl_key_file/>
+                    <ssl_key_password/>
+                    <verify_peer>0</verify_peer>
+                    <verify_host>0</verify_host>
+                    <master_item/>
+                </item>
+                <item>
+                    <name>Docker Version Module</name>
+                    <type>0</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>docker.modver</key>
+                    <delay>30s</delay>
+                    <history>90d</history>
+                    <trends>0</trends>
+                    <status>0</status>
                     <value_type>4</value_type>
                     <allowed_hosts/>
                     <units/>
@@ -204,15 +263,15 @@ Template App Docker - www.monitoringartist.com&#13;
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#HCONTAINERID} container inspect network</name>
+                            <name>{#HCONTAINERID} container Image</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>docker.inspect[/{#HCONTAINERID}]</key>
+                            <key>docker.inspect[/{#HCONTAINERID},Config,Image]</key>
                             <delay>30</delay>
                             <history>7d</history>
                             <trends>0</trends>
-                            <status>1</status>
+                            <status>0</status>
                             <value_type>4</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -246,14 +305,73 @@ https://www.zabbix.org/wiki/Testing_Of_Preprocessing</description>
                             </applications>
                             <valuemap/>
                             <logtimefmt/>
-                            <preprocessing>
-                                <step>
-                                    <type>12</type>
-                                    <params>$..NetworkSettings.IPAddress</params>
-                                    <error_handler>0</error_handler>
-                                    <error_handler_params/>
-                                </step>
-                            </preprocessing>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#HCONTAINERID} container IPAddress</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>docker.inspect[/{#HCONTAINERID},NetworkSettings,IPAddress]</key>
+                            <delay>30</delay>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <status>0</status>
+                            <value_type>4</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Metric documentation avaliable in: https://github.com/monitoringartist/zabbix-docker-monitoring#available-metrics&#13;
+&#13;
+JSONPATH:&#13;
+https://jsonpath.curiousconcept.com/&#13;
+https://restfulapi.net/json-jsonpath/&#13;
+https://www.zabbix.com/documentation/3.4/manual/config/items/item&#13;
+https://www.zabbix.org/wiki/Testing_Of_Preprocessing</description>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>Docker</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
                             <jmx_endpoint/>
                             <timeout>3s</timeout>
                             <url/>
@@ -465,7 +583,7 @@ https://www.zabbix.org/wiki/Testing_Of_Preprocessing</description>
                             <delay>30</delay>
                             <history>7d</history>
                             <trends>0</trends>
-                            <status>1</status>
+                            <status>0</status>
                             <value_type>1</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -534,7 +652,7 @@ https://www.zabbix.org/wiki/Testing_Of_Preprocessing</description>
                             <delay>30</delay>
                             <history>7d</history>
                             <trends>0</trends>
-                            <status>1</status>
+                            <status>0</status>
                             <value_type>1</value_type>
                             <allowed_hosts/>
                             <units/>
