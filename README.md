@@ -1,8 +1,6 @@
 # zabbix_monitoring_docker
 
-#-------------------------------
 # Zabbix
-#-------------------------------
 
 Defina a versão do Zabbix.
 
@@ -83,9 +81,7 @@ Fonte:
 
 * http://blog.aeciopires.com/zabbix-docker/
 
-#-------------------------------
-#Grafana
-#-------------------------------
+# Grafana
 
 O Grafana ficará acessível no URL:
 
@@ -117,9 +113,7 @@ Fonte:
 
 * http://blog.aeciopires.com/instalando-o-grafana-via-docker/
 
-#-------------------------------
 # Monitorando conteineres
-#-------------------------------
 
 Crie um conteiner do Zabbix Agent customizado pelo projeto monitoringartist para monitoramento de conteineres Docker.
 
@@ -139,13 +133,30 @@ docker run -d --name=dockbix-agent-xxl \
 -d monitoringartist/dockbix-agent-xxl-limited:latest
 ```
 
-OBS.: 172.17.0.3 é o endereço IPv4 do conteiner ``zabbix-server``, que é atribuído dinamicamente pelo Docker.
+OBS.: ``172.17.0.3`` é o endereço IPv4 do conteiner ``zabbix-server``, que é atribuído dinamicamente via DHCP pelo Docker.
 
-Importe o template no Zabbix e associe ao host Zabbix-Server:
+Importe o [Template Docker - ZabbixBR.xml](Template_Docker-ZabbixBR.xml) no Zabbix e associe ao host Zabbix-Server.
+
+Veja algumas imagens do template:
+
+* Dados recentes.
+
+![alt text](images/dados_recentes.png "Dados recentes")
+
+* Incidentes.
+
+![alt text](images/incidentes.png "Incidentes")
+
+* Tela de uso de CPU e memória.
+
+![alt text](images/tela_CPU_memoria.png "Tela de uso de CPU e memória")
+
 
 Métricas disponíveis com o uso do módulo ``zabbix_module_docker.so``: https://github.com/monitoringartist/zabbix-docker-monitoring#available-metrics
 
-Importe o dashboard no Grafana: 
+Importe o dashboard no Grafana: [Overview_Docker.json](Overview_Docker.json)
+
+![alt text](images/dashboard_grafana.png "Dashboard do Grafana")
 
 Fonte:
 
@@ -153,7 +164,7 @@ Fonte:
 * https://raw.githubusercontent.com/monitoringartist/zabbix-docker-monitoring/master/template/Zabbix-Template-App-Docker.xml
 * https://raw.githubusercontent.com/monitoringartist/grafana-zabbix-dashboards/master/overview-docker/overview-docker.json
 
-## Desenvolvedores
+## Desenvolvedor
 
 Aécio dos Santos Pires
 
