@@ -5,7 +5,7 @@
 Defina a versão do Zabbix.
 
 ```bash
-VERSAO_MAIOR_ZABBIX=4.2
+VERSAO_MAIOR_ZABBIX=4.4
 ```
 
 Crie o diretório para armazenar os dados do banco de dados fora do conteiner.
@@ -17,7 +17,7 @@ sudo mkdir -p /docker/mysql/zabbix/data
 Obtenha as imagens Docker.
 
 ```bash
-docker pull mysql:5.7
+docker pull mysql:8
 docker pull zabbix/zabbix-agent:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
 docker pull zabbix/zabbix-proxy-sqlite3:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
 docker pull zabbix/zabbix-server-mysql:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
@@ -29,14 +29,14 @@ Crie o conteiner do banco de dados.
 ```bash
 docker run -d --name mysql-zabbix \
  --restart always \
- -p 3307:3306 \
+ -p 3306:3306 \
  -v /docker/mysql/zabbix/data:/var/lib/mysql \
  -e MYSQL_HOST=172.17.0.1 \
  -e MYSQL_ROOT_PASSWORD=secret \
  -e MYSQL_DATABASE=zabbix \
  -e MYSQL_USER=zabbix \
  -e MYSQL_PASSWORD=zabbix \
-mysql:5.7
+mysql:8 --default-authentication-plugin=mysql_native_password
 ```
 
 Crie o conteiner do Zabbix Server.
@@ -47,7 +47,7 @@ docker run -d --name zabbix-server \
  -p 10151:10051 \
  -e MYSQL_ROOT_PASSWORD="secret" \
  -e DB_SERVER_HOST="172.17.0.1" \
- -e DB_SERVER_PORT="3307" \
+ -e DB_SERVER_PORT="3306" \
  -e MYSQL_USER="zabbix" \
  -e MYSQL_PASSWORD="zabbix" \
  -e MYSQL_DATABASE="zabbix" \
@@ -59,9 +59,9 @@ Crie o conteiner do Frontend do Zabbix.
 ```bash
 docker run -d --name zabbix-web \
  --restart always \
- -p 88:80 \
+ -p 80:80 \
  -e DB_SERVER_HOST="172.17.0.1" \
- -e DB_SERVER_PORT="3307" \
+ -e DB_SERVER_PORT="3306" \
  -e MYSQL_USER="zabbix" \
  -e MYSQL_PASSWORD="zabbix" \
  -e MYSQL_DATABASE="zabbix" \
@@ -73,7 +73,7 @@ zabbix/zabbix-web-apache-mysql:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
 
 O Zabbix ficará acessível no URL:
 
-* http://IP-ADDRESS:88
+* http://IP-ADDRESS:80
 * Login: Admin
 * Senha: zabbix
 
@@ -83,18 +83,12 @@ Fonte:
 
 # Grafana
 
-O Grafana ficará acessível no URL:
-
-* http://IP-ADDRESS:3000
-* Login: admin
-* Senha: admin
-
 Crie o diretório para armazenar os dados fora do conteiner.
 
 ```bash
-mkdir -p /docker/grafana/data
-chown -R 472:472 /docker/grafana/data
-chmod -R 775 /docker/grafana
+sudo mkdir -p /docker/grafana/data
+sudo chown -R 472:472 /docker/grafana/data
+sudo chmod -R 775 /docker/grafana
 ```
 
 Crie o conteiner do Grafana.
@@ -109,6 +103,13 @@ docker run -d --name=grafana \
  -v /docker/grafana/data:/var/lib/grafana \
 grafana/grafana
 ```
+
+O Grafana ficará acessível no URL:
+
+* http://IP-ADDRESS:3000
+* Login: admin
+* Senha: admin
+
 Fonte: 
 
 * http://blog.aeciopires.com/instalando-o-grafana-via-docker/
