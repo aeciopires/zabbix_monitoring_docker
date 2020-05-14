@@ -1,11 +1,19 @@
-# zabbix_monitoring_docker
+<!-- TOC -->
+
+- [Zabbix](#zabbix)
+- [Grafana](#grafana)
+- [Monitorando conteineres](#monitorando-conteineres)
+  - [Desenvolvedor](#desenvolvedor)
+  - [Licença](#licen%c3%a7a)
+
+<!-- TOC -->
 
 # Zabbix
 
 Defina a versão do Zabbix.
 
 ```bash
-VERSAO_MAIOR_ZABBIX=4.4
+VERSAO_ZABBIX=5.0
 ```
 
 Crie o diretório para armazenar os dados do banco de dados fora do conteiner.
@@ -18,13 +26,13 @@ Obtenha as imagens Docker.
 
 ```bash
 docker pull mysql:8
-docker pull zabbix/zabbix-agent:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
-docker pull zabbix/zabbix-proxy-sqlite3:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
-docker pull zabbix/zabbix-server-mysql:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
-docker pull zabbix/zabbix-web-apache-mysql:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
+docker pull zabbix/zabbix-agent:ubuntu-$VERSAO_ZABBIX-latest
+docker pull zabbix/zabbix-proxy-sqlite3:ubuntu-$VERSAO_ZABBIX-latest
+docker pull zabbix/zabbix-server-mysql:ubuntu-$VERSAO_ZABBIX-latest
+docker pull zabbix/zabbix-web-apache-mysql:ubuntu-$VERSAO_ZABBIX-latest
 ```
 
-Crie o conteiner do banco de dados.
+Crie o conteiner do banco de dados MySQL.
 
 ```bash
 docker run -d --name mysql-zabbix \
@@ -36,7 +44,10 @@ docker run -d --name mysql-zabbix \
  -e MYSQL_DATABASE=zabbix \
  -e MYSQL_USER=zabbix \
  -e MYSQL_PASSWORD=zabbix \
-mysql:8 --default-authentication-plugin=mysql_native_password
+mysql:8 \
+--default-authentication-plugin=mysql_native_password \
+--character-set-server=utf8 \
+--collation-server=utf8_bin
 ```
 
 Crie o conteiner do Zabbix Server.
@@ -51,7 +62,7 @@ docker run -d --name zabbix-server \
  -e MYSQL_USER="zabbix" \
  -e MYSQL_PASSWORD="zabbix" \
  -e MYSQL_DATABASE="zabbix" \
-zabbix/zabbix-server-mysql:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
+zabbix/zabbix-server-mysql:ubuntu-$VERSAO_ZABBIX-latest
 ```
 
 Crie o conteiner do Frontend do Zabbix.
@@ -59,7 +70,7 @@ Crie o conteiner do Frontend do Zabbix.
 ```bash
 docker run -d --name zabbix-web \
  --restart always \
- -p 80:80 \
+ -p 80:8080 \
  -e DB_SERVER_HOST="172.17.0.1" \
  -e DB_SERVER_PORT="3306" \
  -e MYSQL_USER="zabbix" \
@@ -68,7 +79,7 @@ docker run -d --name zabbix-web \
  -e ZBX_SERVER_HOST="172.17.0.1" \
  -e PHP_TZ="America/Sao_Paulo" \
  -e ZBX_SERVER_PORT="10151" \
-zabbix/zabbix-web-apache-mysql:ubuntu-$VERSAO_MAIOR_ZABBIX-latest
+zabbix/zabbix-web-apache-mysql:ubuntu-$VERSAO_ZABBIX-latest
 ```
 
 O Zabbix ficará acessível no URL:
@@ -135,6 +146,12 @@ docker run -d --name=dockbix-agent-xxl \
 ```
 
 OBS.: ``172.17.0.3`` é o endereço IPv4 do conteiner ``zabbix-server``, que é atribuído dinamicamente via DHCP pelo Docker.
+
+Para obter o IP de um conteiner Docker, use o seguinte comando.
+
+```bash
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' NOME_CONTEINER
+```
 
 Importe o [Template Docker - ZabbixBR.xml](Template_Docker-ZabbixBR.xml) no Zabbix e associe ao host Zabbix-Server.
 
